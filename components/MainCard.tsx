@@ -141,9 +141,6 @@ export const MainCard = (props: MainCardProps) => {
                     email: props.session.user.email
                   }])
                   if (error) throw error
-                  setFirstText("")
-                  setSecondText("")
-                  setThirdText("")
                   refreshData()
                 } catch (error) {
                   window.alert(error.error_description || error.message)
