@@ -16,7 +16,7 @@ export default function ComingSoon(props: HomeProps) {
           <p className={'mt-3 text-lg'}>
             Currently working on a bunch of new features for this application, including new games and challenges to hone your language skills,
             more word difficulties (subsets of easy, medium, advanced subsets to better accommodate those who are learning English),
-            and overall better application feel/design as well as better data persistance.
+            and overall better application feel/design as well as better data persistence.
           </p>
           <p className={'mt-3'}>
             Feel free to <a href="mailto:andrewmouchantaf@gmail.com" className={'underline'}>email</a> me any suggestions
