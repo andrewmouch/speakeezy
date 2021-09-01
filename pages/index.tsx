@@ -1,20 +1,27 @@
 import { Container } from '../components/Container';
 import { MainCard } from '../components/MainCard';
 import { words } from '../words'
+import React, { useEffect, useState } from 'react';
+
+import Auth from '../components/Auth';
+import Account from '../components/Account';
+import { Session } from '@supabase/supabase-js';
+
 type HomeProps = {
+  session: Session
   wordData?: Array<object>
 }
 
 export default function Home(props: HomeProps) {
-  const { wordData } = props;
+  const { wordData, session } = props;
+
   return (
-    <div>
-      <Container>
-        <MainCard
-          wordData={wordData}
-        />
-      </Container>
-    </div >
+    <Container session={session}>
+      <MainCard
+        session={session}
+        wordData={wordData}
+      />
+    </Container>
   )
 }
 

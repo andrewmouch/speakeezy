@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router';
+import { Session } from '@supabase/supabase-js';
+import { supabase } from '../utils/supabaseClient';
 
 type MainCardProps = {
+  session: Session | null;
   wordData: Array<object>
 }
 
-// type AudioStatus = "PLAYING" | "PAUSED" | "STOPPED"
-
 export const MainCard = (props: MainCardProps) => {
-  // const [playing, setPlaying] = useState<AudioStatus>("STOPPED")
   const { wordData } = props
 
   const [firstText, setFirstText] = useState<string>("")
@@ -72,9 +72,9 @@ export const MainCard = (props: MainCardProps) => {
       <hr />
       <div>
         <h2 className={'font-bold mt-4 text-3xl'}>Now go and use the word three times today!</h2>
-        <div className={'flex'}>
+        <div className={'flex mt-5'}>
           <input
-            className='rounded w-10/12 h-8 px-2 my-2 text-primary-black'
+            className={'outline-none rounded w-10/12 h-8 px-2 my-2 text-primary-black flex-grow'}
             disabled={firstComplete}
             value={firstText}
             onChange={(e) => { setFirstText(e.target.value) }}
@@ -88,35 +88,70 @@ export const MainCard = (props: MainCardProps) => {
         </div>
         <div className={'flex'}>
           <input
-            className='rounded w-10/12 h-8 px-2 my-2 text-primary-black'
+            className={'outline-none rounded w-10/12 h-8 px-2 my-2 text-primary-black flex-grow'}
             disabled={secondComplete}
             value={secondText}
             onChange={(e) => { setSecondText(e.target.value) }}
           />
           <div
-            className={'ml-2 self-center bg-primary-pink w-24 h-8 flex justify-center p-1 text-secondary-pink rounded hover:text-opacity-70 select-none'}
+            className={' ml-2 self-center bg-primary-pink w-24 h-8 flex justify-center p-1 text-secondary-pink rounded hover:text-opacity-70 select-none'}
             onClick={() => { setSecondComplete(!secondComplete) }}
           >
             {secondComplete ? "Edit" : "Done"}
           </div>
         </div>
-        <div className={'flex'}>
+        <div className={'flex w-full'}>
           <input
-            className='rounded w-10/12 h-8 px-2 my-2 text-primary-black'
+            className={'outline-none rounded flex-grow h-8 px-2 my-2 text-primary-black'}
             disabled={thirdComplete}
             onChange={(e) => { setThirdText(e.target.value) }}
             value={thirdText}
           />
           <div
-            className={'ml-2 self-center bg-primary-pink w-24 h-8 flex justify-center p-1 text-secondary-pink rounded hover:text-opacity-70 select-none'}
+            className={'ml-2 flex-none self-center bg-primary-pink w-24 h-8 flex justify-center p-1 text-secondary-pink rounded hover:text-opacity-70 select-none'}
             onClick={() => { setThirdComplete(!thirdComplete) }}
           >
             {thirdComplete ? "Edit" : "Done"}
           </div>
         </div>
       </div>
-      <div className={'bg-primary-pink mt-8 w-24 flex justify-center p-1 text-secondary-pink rounded select-none hover:text-opacity-70'} onClick={() => { refreshData() }}>
-        New word
+      <div className={'flex flex-row-reverse'}>
+        <div
+          className={'bg-primary-pink mt-8 w-24 flex justify-center p-1 text-secondary-pink rounded select-none hover:text-opacity-70'}
+          onClick={() => { refreshData() }}
+
+        >
+          New word
+        </div>
+        <div
+          className={'bg-primary-pink mt-8 w-24 mx-2 flex justify-center p-1 text-secondary-pink rounded select-none hover:text-opacity-70'}
+          onClick={async () => {
+            if (!props.session) {
+              router.replace("/auth");
+            } else {
+              if (firstText != "" && secondText != "" && thirdText != "") {
+                try {
+                  const { error } = await supabase.from("user_words").insert([{
+                    response_1: firstText,
+                    response_2: secondText,
+                    response_3: thirdText,
+                    // @ts-ignore
+                    word: props.wordData[0].word,
+                    profile_id: props.session.user.id,
+                    email: props.session.user.email
+                  }])
+                  if (error) throw error
+                } catch (error) {
+                  window.alert(error.error_description || error.message)
+                }
+              } else {
+                window.alert("Fill in all three examples before saving your responses")
+              }
+            }
+          }}
+        >
+          Save
+        </div>
       </div>
     </div>
   )

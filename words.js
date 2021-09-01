@@ -1231,7 +1231,6 @@ export const words = [
   "Sanction",
   "Sanguinary",
   "Sanguine",
-  "Sap",
   "Sardonic",
   "Sate",
   "Satiate",

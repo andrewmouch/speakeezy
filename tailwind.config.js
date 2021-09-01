@@ -8,7 +8,8 @@ module.exports = {
         "primary-pink": '#FF847B',
         'secondary-pink': '#FECEA8',
         "primary-black": "#2A363B",
-        "secondary-black": '#1E2A2F'
+        "secondary-black": '#1E2A2F',
+        "footer-grey": '#c7c7c7'
       }
     },
   },

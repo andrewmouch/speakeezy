@@ -1,11 +1,10 @@
 import Head from 'next/head';
-import { useRouter } from 'next/router';
-import NextLink from 'next/link';
 import { Header } from './Header';
-
-// import Footer from './Footer';
+import { Session } from '@supabase/supabase-js';
+import { Footer } from './Footer';
 
 type ContainerProps = {
+  session: Session | null;
   title?: string,
   description?: string
   children?: React.ReactNode
@@ -19,15 +18,18 @@ export const Container = (props: ContainerProps) => {
   };
 
   return (
-    <>
+    <div>
       <Head>
         <title>{meta.title}</title>
         <meta content={meta.description} name="description" />
       </Head>
-      <Header />
-      {children}
-    </>
-
-
+      <Header session={props.session} />
+      <div className={'flex flex-col justify-between'} style={{ minHeight: '90vh' }}>
+        <div className={''}>
+          {children}
+        </div >
+        <Footer />
+      </div>
+    </ div>
   );
 }
