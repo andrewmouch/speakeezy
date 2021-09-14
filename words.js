@@ -320,6 +320,7 @@ export const words = [
   "Defunct",
   "Degradation",
   "Deign",
+  "Dejected",
   "Deleterious",
   "Deliberate",
   "Deliberate",
